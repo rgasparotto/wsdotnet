@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using wsTest.Helpers;
 using wsTest.Models.Data;
 using wsTest.Models.Services.Datas;
 
@@ -31,6 +32,18 @@ namespace wsTest.Controllers
         {
             LoginResult res;
             res = await _myDb.login(credentials);
+            return Ok(res);
+        }
+
+        [Authorize]
+        [HttpGet("userList")]
+        [Produces("application/json")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LoginResult))]
+        public async Task<ActionResult<LoginResult>> userList()
+        {
+            List<User> res = new List<User>();
+            res = await _myDb.GetAll();
             return Ok(res);
         }
     }

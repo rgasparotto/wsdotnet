@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using wsTest.Helpers;
 using wsTest.Models.Services.Datas;
 
 namespace wsTest
@@ -38,6 +39,10 @@ namespace wsTest
                     .AllowCredentials());
             });
 
+            // configure strongly typed settings object
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+
+
             services.AddTransient<IDBService, MysqlService>();
         }
 
@@ -56,6 +61,10 @@ namespace wsTest
             app.UseRouting();
 
             app.UseAuthorization();
+
+            // custom jwt auth middleware
+            app.UseMiddleware<JwtMiddleware>();
+
 
             app.UseEndpoints(endpoints =>
             {
